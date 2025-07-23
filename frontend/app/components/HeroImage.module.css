@@ -1,0 +1,10 @@
+.heroImg {
+  background-position: "90% center",
+}
+
+@media (max-width: 780px) {
+  .heroImg {
+    height: 100vh;
+    background-position: -60% center;
+  }
+}

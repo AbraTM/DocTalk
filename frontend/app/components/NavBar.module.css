@@ -1,0 +1,101 @@
+.mainNav {
+    position: fixed;
+
+    width: 100%;
+    top: 0;
+    z-index: 999;
+    background-color: transparent;
+}
+
+.navTop {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    align-items: center;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.scrolled {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.mainLogo {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.navCenter {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 15px;
+}
+
+.navCenter a {
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+.navCenter a:hover {
+    color: var(--gray);
+}
+
+.navBtn {
+    background: none;
+    outline: none;
+    border: none;
+    display: none;
+    justify-self: end;
+    transition: color 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.navBtn:hover {
+    color: var(--gray);
+}
+
+.sideNav {
+    position: fixed;
+    top: 57.5px;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    padding: 20px;
+    width: 220px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.sideNav.open {
+    transform: translateX(0%);
+}
+
+.sideNav a {
+    transition: color 0.2s ease-in-out;
+}
+
+.sideNav a:hover {
+    color: var(--gray);
+}
+
+@media (max-width: 780px) {
+    .navTop {
+        grid-template-columns: 1fr auto;
+    }
+
+    .navCenter {
+        display: none;
+    }
+
+    .navBtn {
+        display: block;
+    }
+}

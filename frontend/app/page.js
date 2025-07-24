@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styles from "./page.module.css";
 import HeroImage from "./components/HeroImage";
 
-export default function Home(){
+export default function HomePage(){
   return(
     <div className={styles.home}>
       <div className={styles.heroTop}>
@@ -12,7 +12,7 @@ export default function Home(){
         </p>
 
         <button className={styles.getStarted}>
-          <Link href="/about">Get Started</Link>
+          <Link href="/getStarted">Get Started</Link>
         </button>
       </div>
 

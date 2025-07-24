@@ -1,0 +1,22 @@
+.getStarted{
+    margin-top: 60px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.getStartedLeft{
+    background-color: var(--nice-black);
+    background-image: url("../../public/formBg.jpg");
+    background-size: contain;
+}
+
+@media (max-width: 780px) {
+    .getStarted{
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+    .getStartedLeft{
+        grid-row: 2;
+    }
+}

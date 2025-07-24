@@ -32,7 +32,6 @@
   transition: all 0.35s ease-in-out;
 }
 
-/* Initial ::before pseudo-element */
 .getStarted::before {
   content: "";
   position: absolute;

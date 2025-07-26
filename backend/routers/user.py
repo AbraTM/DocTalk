@@ -17,7 +17,7 @@ async def createUser(
     if not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Invalid Firebase Token.")
     id_token = authorization.split(" ")[1]
-    
+
     try:
         decode_token = auth.verify_id_token(id_token)
         firebase_uid = decode_token["uid"]
@@ -39,9 +39,13 @@ async def createUser(
 
 @router.post("/signin")
 async def signin(
-    id_token: str,
+    authorization: str = Header(...),
     db: AsyncSession = Depends(get_db)
 ) -> UserOut:
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Invalid Firebase Token.")
+    id_token = authorization.split(" ")[1]
+    
     try:
         decode_token = auth.verify_id_token(id_token)
         firebase_uid = decode_token["uid"]

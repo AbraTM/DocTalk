@@ -100,6 +100,11 @@
     padding: 5px;
     border: 1px solid black;
     opacity: 0.6;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.otherSignup img:hover{
+    opacity: 1;
 }
 
 .switchMode{

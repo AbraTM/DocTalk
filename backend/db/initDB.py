@@ -1,6 +1,7 @@
 from db.databaseConfig import engine, Base
 from models.user import User
 from models.file import File
+from models.summary import Summary
 import asyncio
 
 async def init_models():

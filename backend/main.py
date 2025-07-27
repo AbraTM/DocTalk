@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import utils.firebaseConfig
 from routers.user import router as UserRouter
 from routers.file import router as FileRouter
+from routers.summary import router as SummaryRouter
 
 description = """
     DocTalk is a web platform that helps users understand their medical test results by generating easy-to-read 
@@ -36,6 +37,7 @@ app.add_middleware(
 # Routers
 app.include_router(UserRouter)
 app.include_router(FileRouter)
+app.include_router(SummaryRouter)
 
 @app.get("/")
 def root():

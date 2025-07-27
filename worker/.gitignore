@@ -10,6 +10,9 @@ venv/
 .env.*
 
 # Ignore secrets folder
-secrets
 secrets/
+secrets/*
 
+# Ignore the temp folder
+temp
+temp/

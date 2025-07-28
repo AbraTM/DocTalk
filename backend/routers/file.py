@@ -55,11 +55,3 @@ async def upload(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-
-@router.post("/save")
-async def saveFile(
-    fileinfo,
-    db: AsyncSession = Depends(get_db)
-):
-    print("Req Recieved")
-    print(fileinfo)

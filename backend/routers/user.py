@@ -2,9 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.user import UserCreate, UserOut
+from schemas.token import TokenCreate
 from models.user import User
 from firebase_admin import auth
 from db.databaseConfig import get_db
+from utils.verify_user_token import verify_firebase_token
+from utils.jwt import encode_jwt_token
 
 router = APIRouter(prefix="/user", tags=["user"])
 
@@ -59,3 +62,15 @@ async def signin(
     
     return user
     
+@router.post("/get_chat_token")
+async def getChatToken(payload: TokenCreate):
+    if not payload.firebase_token:
+        raise HTTPException(status_code=401, detail="Missing Firebase Token.")
+    user_fb_id = verify_firebase_token(payload.firebase_token)
+    if not user_fb_id:
+        raise HTTPException(status_code=401, detail="Invalid Firebase token.")
+    jwt_token = encode_jwt_token({
+        "user_fb_id": user_fb_id,
+        "summary_id": payload.summary_id
+    })
+    return { "token": jwt_token }

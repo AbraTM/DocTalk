@@ -4,6 +4,7 @@ import utils.firebaseConfig
 from routers.user import router as UserRouter
 from routers.file import router as FileRouter
 from routers.summary import router as SummaryRouter
+from routers.chat import router as ChatRouter
 
 description = """
     DocTalk is a web platform that helps users understand their medical test results by generating easy-to-read 
@@ -38,6 +39,7 @@ app.add_middleware(
 app.include_router(UserRouter)
 app.include_router(FileRouter)
 app.include_router(SummaryRouter)
+app.include_router(ChatRouter)
 
 @app.get("/")
 def root():

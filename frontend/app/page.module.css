@@ -13,6 +13,7 @@
 .heroTop p{
   max-width: 45%;
   font-size: 2.5rem;
+  font-weight: 300;
 }
 
 .getStarted{
@@ -21,7 +22,6 @@
 
   border: none;
   outline: none;
-  font-family: 'PPNeueMontreal', sans-serif;
   font-size: 2rem;
   font-weight: 400;
 

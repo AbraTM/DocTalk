@@ -1,6 +1,5 @@
 .mainNav {
     position: fixed;
-
     width: 100%;
     top: 0;
     z-index: 999;
@@ -58,7 +57,7 @@
 
 .sideNav {
     position: fixed;
-    top: 57.5px;
+    top: 50px;
     right: 0;
     bottom: 0;
     background-color: white;
@@ -84,6 +83,42 @@
 
 .sideNav a:hover {
     color: var(--gray);
+}
+
+.add_new{
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+    display: grid;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap:10px;
+    transition: opacity 0.2s ease-in;
+}
+
+.add_new span{
+    font-size: clamp(1.6rem, 2vw, 2rem);
+    font-weight: 300;
+}
+
+.add_new:hover{
+    opacity: 0.6;
+}
+
+.sideNav hr{
+    margin-bottom: 20px;
+}
+
+.sideNav h3{
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.sideNav p{
+    font-size: 0.9rem;
+    padding-top: 7px;
 }
 
 @media (max-width: 780px) {

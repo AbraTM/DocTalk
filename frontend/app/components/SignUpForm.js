@@ -144,7 +144,18 @@ export default function SignUpForm(){
 
                     <label htmlFor="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="bananafish" value={userInput.confirmPassword} onChange={handleChange}></input>
-                    {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
+                    <div className={styles.errorMsg}>
+                        <p
+                            style={{
+                                opacity: errorMsg ? "1" : "0",
+                                visibility: errorMsg ? "visible" : "hidden",
+                                minHeight: "1.5rem",
+                                transition: "opacity 0.2s ease"
+                            }}
+                        >
+                            {errorMsg || ""}
+                        </p>
+                    </div>
                     <button type="submit" className={styles.signUpButton}>Create an account</button>
                 </form>
                 :
@@ -154,7 +165,18 @@ export default function SignUpForm(){
 
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="bananafish"  value={userInput.password} onChange={handleChange}></input>
-                    {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
+                    <div className={styles.errorMsg}>
+                        <p
+                            style={{
+                                opacity: errorMsg ? "1" : "0",
+                                visibility: errorMsg ? "visible" : "hidden",
+                                minHeight: "1rem",
+                                transition: "opacity 0.2s ease"
+                            }}
+                        >
+                            {errorMsg || ""}
+                        </p>
+                    </div>
                     <button type="submit" className={styles.signUpButton}>Login</button>
                 </form>
             }

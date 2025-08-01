@@ -1,9 +1,12 @@
 "use client";
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import styles from "./NavBar.module.css";
 
 export default function NavBar() {
+    const path = usePathname()
+    const isChatPath = path === "/chat"
     const [hamburgMenu, setHamburgMenu] = React.useState(false);
     const [scrolled, setScrolled] = React.useState(false);
 
@@ -44,6 +47,16 @@ export default function NavBar() {
                 <a>Home</a>
                 <a>Get Started</a>
                 <a>How this works</a>
+
+                <hr></hr>
+                <button className={styles.add_new}>
+                    <p>Add new report.</p>
+                    <span> + </span>
+                </button>
+                <hr></hr>
+                <h3>Previous Reports.</h3>
+                <p>Blood Test</p>
+                <p>ECG Report</p>
             </div>
         </nav>
     );

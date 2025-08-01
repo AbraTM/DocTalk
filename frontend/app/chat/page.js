@@ -1,0 +1,55 @@
+"use client"
+
+import { useState, useRef, useEffect } from "react"
+import styles from "./page.module.css"
+import Summary from "../components/summary"
+
+export default function ChatPage(){
+    const [ isInputFocused, setIsInputFocused ] = useState(false)
+    const msgBoxRef = useRef(null)
+    return(
+        <div className={styles.chat_page}>
+            <div className={styles.side_bar}>
+                <button className={styles.add_new}>
+                    <p>Add new report.</p>
+                    <span> + </span>
+                </button>
+                <hr></hr>
+                <h3>Previous Reports.</h3>
+                <p>Blood Test</p>
+                <p>ECG Report</p>
+            </div>
+            <div className={styles.chat_main}>
+                <div className={styles.scrollable}>
+                    <Summary />
+                    <div className={styles.messages}>
+                        {/* Messages go here */}
+                    </div>
+                </div>
+                <div className={styles.msg_box}>
+                    <textarea 
+                        ref={msgBoxRef} 
+                        type="text" 
+                        id="user_msg" 
+                        name="user_msg" 
+                        placeholder="Ask anything about your report summary."
+                        onFocus={() => {
+                            if(window.innerWidth <= 768){
+                                msgBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center'})
+                            } 
+                        }}
+                    />
+                    <button className={styles.send_btn}>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.99992 16V6.41407L5.70696 9.70704C5.31643 10.0976 4.68342 10.0976 4.29289 9.70704C3.90237 9.31652 3.90237 8.6835 4.29289 
+                            8.29298L9.29289 3.29298L9.36907 3.22462C9.76184 2.90427 10.3408 2.92686 10.707 3.29298L15.707 8.29298L15.7753 8.36915C16.0957 8.76192 
+                            16.0731 9.34092 15.707 9.70704C15.3408 10.0732 14.7618 10.0958 14.3691 9.7754L14.2929 9.70704L10.9999 6.41407V16C10.9999 16.5523 
+                            10.5522 17 9.99992 17C9.44764 17 8.99992 16.5523 8.99992 16Z"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
+}

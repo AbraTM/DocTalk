@@ -2,9 +2,25 @@
 
 import React from "react";
 import styles from "./SignUpForm.module.css";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/utils/firebaseConfig";
 import { createUser, loginUser, signUpWithGoogle } from "@/utils/firebaseAuth";
 
 export default function SignUpForm(){
+//     console.log(auth)
+//     React.useEffect(() => {
+//     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+//         if (user) {
+//             console.log("User:", user);
+//             const id_token = await user.getIdToken();
+//             console.log("ID Token:", id_token);
+//         } else {
+//             console.log("No user is signed in.");
+//         }
+//     });
+
+//     return () => unsubscribe(); 
+// }, []);
     const [isLogin, setIsLogin] = React.useState(false);
     const [userInput, setUserInput] = React.useState({
         firstName: "",
@@ -37,7 +53,6 @@ export default function SignUpForm(){
             setErrorMsg(error.message)
             return;
         }
-        console.log(user)
     }
     
     const handleSubmit = async (event) => {

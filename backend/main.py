@@ -44,3 +44,4 @@ app.include_router(ChatRouter)
 @app.get("/")
 def root():
     return {"message": "DocTalk Backend"}
+

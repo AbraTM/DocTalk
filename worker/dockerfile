@@ -1,0 +1,24 @@
+FROM python:3.12-alpine
+
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies like Poppler
+RUN apk add --no-cache poppler-utils
+
+# Set working dir in container
+WORKDIR /app
+
+# Python Packages
+COPY requirements.txt .
+
+# Install build dependencies, install python packages, then remove the build dependencies.
+# This is done in a single RUN command to keep the final image smaller.
+# The 'build-base' package contains the C/C++ compiler toolchain.
+RUN pip install --no-cache-dir -r requirements.txt 
+
+# Copy the rest code from the worker
+COPY . .
+
+# Running the worker script
+CMD [ "python", "main.py" ]
+

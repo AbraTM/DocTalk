@@ -1,5 +1,5 @@
 import { auth, googleProvider } from "./firebaseConfig";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 
 export const createUser = async (userData) => { 
     try{
@@ -43,5 +43,14 @@ export const signUpWithGoogle = async () => {
             user: null,
             error: error
         };
+    }
+}
+
+export const logout = async () => {
+    try{
+        await signOut(auth)
+        console.log("Logged Out.")
+    } catch(error){
+        console.error("Logout Failed.", error)
     }
 }

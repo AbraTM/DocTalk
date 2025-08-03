@@ -12,7 +12,6 @@ const fireBaseConfig = {
 };
 
 const app = getApps().length === 0 ? initializeApp(fireBaseConfig) : getApps()[0];
-
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider(); 
 googleProvider.setCustomParameters({

@@ -19,20 +19,24 @@ def summariseReport(image_paths):
         You are a medically-aware assistant. A patient has uploaded one or more diagnostic test reports.
         Your job is to analyze the content and generate a structured medical summary that can be shown to non-experts.
 
-        Respond ONLY with a valid JSON object, no extra comments. Use this structure:
+        Respond ONLY with a valid JSON object, no extra comments or markdown. Use this structure:
 
         {
-        "level_of_concern": "Normal" | "Low" | "Moderate" | "High" | "Critical",
-        "main_finding": "<most important finding>",
-        "summary_text": "<plain-language explanation of results>",
-        "additional_notes": "<optional doctor-style advice, if applicable>"
+            "level_of_concern": "Normal" | "Low" | "Moderate" | "High" | "Critical",
+            "main_finding": "<most important finding>",
+            "quick_summary": "<2-4 sentence layman explanation of the result>",
+            "detailed_summary": "<longer, 10-15 sentence explanation going into relevant metrics, implications, and clarifying medical terms>",
+            "additional_notes": "<optional doctor-style advice, lifestyle suggestions, or follow-up recommendations>",
+            "tags": ["<keyword1>", "<keyword2>", ...],
+            "recommended_action": "Monitor" | "Routine Checkup" | "Consult Doctor" | "Urgent Attention"
         }
 
         Guidelines:
         - Be calm, fact-based, and empathetic.
-        - If findings are unclear, say so and recommend professional consultation.
-        - Avoid medical jargon unless it is explained clearly.
-        - Make sure the summary is detailed, clearing up every relevant thing and making sure the patient is aware of them
+        - Explain all relevant terms (e.g., QT interval, WBC) in non-technical language.
+        - If findings are unclear or borderline, indicate so with a confidence level and advise consultation.
+        - Use bullet-point style only in `additional_notes`, if it improves readability.
+        - Never include markdown, explanations, or code blocks — only raw JSON.
 
         Begin analysis below.
     """
@@ -56,7 +60,7 @@ def summariseReport(image_paths):
         print("JSON Parse Error:" + str(e))
         return{
             "level_of_concern": "Unknown",
-            "main_finding": "Could not parse summary",
-            "summary_text": "There was a problem generating the summary. Please consult your doctor.",
-            "additional_notes": str(e)
+            "main_finding": "Could not parse report.",
+            "quick_text": "There was a problem generating the summary. Please consult your doctor.",
+            "error": str(e)
         }

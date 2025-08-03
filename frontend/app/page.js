@@ -2,6 +2,7 @@ import Link from 'next/link';
 import styles from "./page.module.css";
 import HeroImage from "./components/HeroImage";
 
+
 export default function HomePage(){
   return(
     <div className={styles.home}>

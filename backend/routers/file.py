@@ -27,7 +27,7 @@ async def upload(
 
         # Saving Stored file metadata to postgres
         # Temporarily hardcoidng user id
-        user_id_hardcoded = "9ad2d375-0b32-43b2-951f-9ccbddde2eb8"
+        user_id_hardcoded = "0ed26e97-9752-479a-8a8b-f582b12c6bfd"
         report = FileModel(
             user_id = user_id_hardcoded,
             file_name = uploaded_report.filename,

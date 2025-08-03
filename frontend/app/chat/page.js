@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import styles from "./page.module.css"
-import Summary from "../components/summary"
+import Summary from "@/app/components/summary"
 
 export default function ChatPage(){
     const [ isInputFocused, setIsInputFocused ] = useState(false)

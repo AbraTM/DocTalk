@@ -1,6 +1,6 @@
 .home {
   padding-top: 60px;
-  margin-bottom: 500px;
+  margin-bottom: 300px;
 }
 
 .heroTop {
@@ -12,7 +12,7 @@
 
 .heroTop p{
   max-width: 45%;
-  font-size: 2.5rem;
+  font-size: clamp(2.4rem, 1vw, 3rem);
   font-weight: 300;
 }
 

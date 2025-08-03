@@ -1,6 +1,7 @@
 import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import AuthProvider from "@/context/AuthContext";
 
 export const metadata = {
   title: "DocTalk",
@@ -16,9 +17,11 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet"></link>
       </head>
       <body>
-        <NavBar />
-        {children}
-        <Footer />
+        <AuthProvider>
+            <NavBar />
+            {children}
+            <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

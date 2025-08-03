@@ -9,7 +9,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 60px;
+    gap: 70px;
 
     padding-inline: 100px;
 }
@@ -20,11 +20,12 @@
 }
 
 .footerTopLeft h2{
-    font-size: 4.5rem;
+    font-size: clamp(2.5rem, 3.5vw, 4.6rem)
 }
 
 .footerTopLeft p{
-    font-size: 2rem;
+    padding-top: 10px;
+    font-size: clamp(1.5rem, 1.8vw, 3rem);
     font-style: italic;
 }
 
@@ -39,9 +40,9 @@
 }
 
 .footerLinks a{
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 1.3vw, 1.6rem);
     padding-right: 20px;
-    padding-bottom: 5px;
+    padding-bottom: 7px;
     border-bottom: 2px solid var(--background);
     transition: opacity 0.25s ease-in;
 }

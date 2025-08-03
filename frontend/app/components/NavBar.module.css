@@ -55,6 +55,15 @@
     color: var(--gray);
 }
 
+.logout_nav{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    justify-self: end;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
 .sideNav {
     position: fixed;
     top: 50px;
@@ -126,7 +135,7 @@
         grid-template-columns: 1fr auto;
     }
 
-    .navCenter {
+    .navCenter, .logout_nav {
         display: none;
     }
 

@@ -1,22 +1,33 @@
 # 🩺 DocTalk – Understand Your Medical Reports with AI
 
-DocTalk is an AI-powered platform that helps non-professionals understand complex medical test reports. It generates human-readable summaries from uploaded documents (PDFs, images, text) and includes a conversational chatbot to answer health-related questions — making healthcare data truly accessible.
+DocTalk is an AI-powered platform that helps non-professionals make sense of complex medical reports.
+Upload your health documents (PDFs, images, or text) and get clear, human-readable summaries, plus a conversational chatbot that can answer health-related questions in real time.
+
+Goal: Make healthcare data truly accessible to everyone.
 
 ---
 
-## 🚀 Features
+## Features
 
-- 🧠 LLM-powered Summarization – Translates complex lab reports into simple explanations using Gemini, OpenAI GPT, etc.
-- 💬 Interactive Chatbot – Ask follow-up questions about your reports using a health-aware chatbot.
-- 🖼️ PDF/Image/Text Support – Upload various file formats for interpretation.
-- ☁️ AWS-Driven Asynchronous Processing – Background tasks handled via SQS, S3, and containerized workers on EC2/ECS.
-- 🐳 Containerized Services – Easy deployment with Docker and Docker Compose.
-- 🧾 Poppler-Powered PDF Parsing – OCR and PDF support with Poppler utilities on the worker.
-- 🌐 Modern Tech Stack – Built with FastAPI, ReactJS, and designed for scalability.
+- LLM-Powered Summarization – Converts complex lab results into plain-language explanations using Gemini Pro, OpenAI GPT, and other models.
+
+- Interactive Chatbot – Ask follow-up questions about your reports with a health-aware AI assistant.
+
+- Multi-Format Support – Works with PDFs, scanned images, and plain text reports.
+
+- AWS-Driven Asynchronous Processing – Background tasks handled via SQS, S3, and containerized workers running on EC2.
+
+- Containerized Services – Consistent deployments using Docker and Docker Compose.
+
+- Poppler-Powered PDF Parsing – Supports OCR and advanced PDF handling.
+
+- Modern & Scalable Stack – Built with Next.js (frontend) and FastAPI (backend) for performance and flexibility.
+
+- Firebase Authentication – Secure and simple sign-in for users..
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 | Layer            | Technology                    |
 |------------------|-------------------------------|
@@ -30,18 +41,16 @@ DocTalk is an AI-powered platform that helps non-professionals understand comple
 
 ---
 
-## 🧪 Sample Use Cases
+## Sample Use Cases
 
-- 📤 Upload your **CBC, LFT, or X-ray** report  
-- 📄 Get a **simple English summary**  
-- 🤖 Ask: “*Is this vitamin level normal?*” or “*What should I do next?*”  
+-  Upload your **Blood Test, ECG Scans, or X-ray** report  
+-  Get a **simple English summary**  
+-  Ask: “*Is this vitamin level normal?*” or “*What should I do next?*”  
 
 ---
 
-## 🧰 Future Improvements
+## Future Improvements
 
-- ✅ OCR for scanned images  
-- ✅ Auth with **AWS Cognito**  
-- 🔜 Patient **history timeline**  
-- 🔜 **Analytics dashboard** for frequent conditions  
-- 🔜 Auto-**translation to regional languages**  
+- Chat history view & retrieval – let users access and browse their past conversations
+- Multi-report health analysis – combine multiple reports for overall health summaries and trends
+- Patient history timeline – visualize health changes over time

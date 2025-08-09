@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 import HeroImage from "./components/HeroImage";
 
 
-export default function HomePage(){
+export default async function HomePage(){
   return(
     <div className={styles.home}>
       <div className={styles.heroTop}>

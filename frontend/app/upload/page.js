@@ -1,24 +1,27 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import styles from "./page.module.css"
 
 export default function Upload(){
+    const router = useRouter()
     const [ errorMsg, setErrorMsg ] = useState("")
     const handleFileChange = async(event) =>{
         const selectedFile = event.target.files[0]
         if(selectedFile){
             const formData = new FormData()
             formData.append("uploaded_report", selectedFile)
-            console.log(selectedFile)
-            console.log(process.env.NEXT_PUBLIC_BACKEND_API_URL)
             try{
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/file/upload`, {
                     method: "POST",
-                    body: formData
+                    body: formData,
+                    credentials: "include"
                 })
                 const data = await response.json()
-                console.log(data)
+                if(response.ok){
+                    router.replace(`/chat/${data.file_id}`)
+                }
             }catch(error){
                 console.error(error)
                 setErrorMsg("Something went wrong.")

@@ -1,26 +1,27 @@
 "use client"
 
 import React from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import Loading from "./Loading";
 import styles from "./SignUpForm.module.css";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/utils/firebaseConfig";
 import { createUser, loginUser, signUpWithGoogle } from "@/utils/firebaseAuth";
 
 export default function SignUpForm(){
-//     console.log(auth)
-//     React.useEffect(() => {
-//     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-//         if (user) {
-//             console.log("User:", user);
-//             const id_token = await user.getIdToken();
-//             console.log("ID Token:", id_token);
-//         } else {
-//             console.log("No user is signed in.");
-//         }
-//     });
+    // Handle user redirect and auth check
+    const { user, loading } = useAuth()
+    const router = useRouter()
 
-//     return () => unsubscribe(); 
-// }, []);
+    React.useEffect(() => {
+        if(!loading && user){
+            router.replace("/upload")
+        }
+    }, [loading, user, router])
+
+    if(loading || user){
+        return <Loading />
+    }
+
     const [isLogin, setIsLogin] = React.useState(false);
     const [userInput, setUserInput] = React.useState({
         firstName: "",

@@ -4,6 +4,10 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithP
 export const createUser = async (userData) => { 
     try{
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
+        await updateProfile(userCredential.user, {
+            displayName: `${userData.first_name} ${userData.last_name}`
+        });
+        
         return {
             user: userCredential.user,
             error: null

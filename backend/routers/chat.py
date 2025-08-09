@@ -1,4 +1,5 @@
 import json
+import uuid
 import google.generativeai as genai
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from sqlalchemy import update, func, select
@@ -7,6 +8,7 @@ from db.databaseConfig import get_db_session_context
 from aws.awsConfig import s3, S3_BUCKET_NAME
 from models.user import User
 from models.chat import Chat
+from models.file import File
 from models.summary import Summary
 from models.message import Message, Role
 from utils.get_s3_key import get_s3_key
@@ -19,38 +21,50 @@ router = APIRouter(prefix="/ws", tags=["Chat"])
 @router.websocket("/chat")
 async def chat_socket(
     websocket: WebSocket,
-    token: str,
+    fileId: str,
+    token: str
 ):
     await websocket.accept()
     decoded_token = decode_jwt_token(token)
     if decoded_token.get("status") != "success":
         await websocket.close(code=4001, reason=decoded_token.message)
         return
-
-    data = decoded_token["data"]  # At this point it's safe
-    user_fb_id = data.get("user_fb_id")
-    summary_id = data.get("summary_id")
-    chat_id = data.get("chat_id") 
-
-    print(data)
+    
+    try:
+        user_id = uuid.UUID(decoded_token["data"]["user_id"])
+    except Exception as e:
+        print("Invalid user_id in token:", decoded_token.get("data"))
+        await websocket.close(code=4002, reason="Invalid token payload")
+        return
+    try:
+        file_id_uuid = uuid.UUID(fileId)
+    except Exception as e:
+        print("Invalid fileId provided:", fileId)
+        await websocket.close(code=4003, reason="Invalid file id")
+        return
 
     async with get_db_session_context() as db:
         try:
             # Checking if the user is a valid user
-            user_result = await db.execute(select(User).where(User.fb_id == user_fb_id))
+            user_result = await db.execute(select(User).where(User.id == user_id))
             user = user_result.scalar_one_or_none()
             if not user:
                 await websocket.close(code=4000, reason="User doesn't exist.")
                 return
             
+            # Checking if current user is the one that uploaded this file
+            file_result = await db.execute(select(File).where(File.id == file_id_uuid, File.user_id == user_id))
+            if not file_result.scalar_one_or_none():
+                await websocket.close(code=4001, reason="This file wasn't uploaded by the current.")
+                return
+            
             # With the summary_id as a search param retrieving the summary file
-            summary_result = await db.execute(select(Summary).where(Summary.id == summary_id))
+            summary_result = await db.execute(select(Summary).where(Summary.file_id == file_id_uuid))
             summary = summary_result.scalar_one_or_none()
             if not summary:
                 await websocket.close(code=4002, reason="No summary with the provided id.")
                 return
             summary_s3_url = summary.summary_s3_url
-            summary_id = summary.id
             s3_key = get_s3_key(summary_s3_url)
 
             # Retreving the summary data from s3 bucket
@@ -59,24 +73,21 @@ async def chat_socket(
             summary_data = json.loads(json_bytes.decode('utf-8'))
 
             # Initialzing Chat and Chat History
-            chat = None
+            # Checking if a chat with this file already exists
+            chat_result = await db.execute(select(Chat).where(Chat.file_id == file_id_uuid))
+            chat = chat_result.scalar_one_or_none()
             chat_history = []
 
-            if chat_id:
-                chat_result = await db.execute(select(Chat).where(Chat.chat_id == chat_id))
-                chat = chat_result.scalar_one_or_none()
-                if not chat:
-                    await websocket.close(code=4003, reason="No chat with this id.")
-                    return
-
+            if chat:
                 messages_result = await db.execute(
-                    select(Message).where(Message.chat_id == chat_id).order_by(Message.created_at.asc())
+                    select(Message).where(Message.chat_id == chat.chat_id).order_by(Message.created_at.asc())
                 )
                 messages = messages_result.scalars().all()
                 for msg in messages:
+                    role_str = msg.role.value if hasattr(msg.role, "value") else str(msg.role)
                     chat_history.append({
-                        "role": msg.role,
-                        "message": msg.content
+                        "role": role_str,
+                        "parts": [msg.content]
                     })
             else:
                 # For the particular user created a new chat
@@ -88,6 +99,7 @@ async def chat_socket(
 
                 new_chat = Chat(
                     user_id = user.id,
+                    file_id = fileId,
                     title = title_display
                 )
                 db.add(new_chat)
@@ -95,7 +107,6 @@ async def chat_socket(
                 await db.refresh(new_chat)
                 chat = new_chat
             
-
             # Now intializing the LLM
             system_prompt = f"""
                 You are a medical assitant, trying to help a non-professional patient with the queries
@@ -113,7 +124,10 @@ async def chat_socket(
                 assistant_msg = response.text
 
                 # Sending message to frontend
-                await websocket.send_text(assistant_msg)
+                try:
+                    await websocket.send_text(assistant_msg)
+                except WebSocketDisconnect:
+                    break
 
                 # Saving the user's msg and the assistant's response to db
                 db.add(Message(
@@ -130,7 +144,7 @@ async def chat_socket(
 
                 # Updating the chat
                 await db.execute(
-                    update(Chat).where(Chat.chat_id == (chat.chat_id if chat else new_chat.chat_id)).values(updated_at=func.now())
+                    update(Chat).where(Chat.chat_id == chat.chat_id).values(updated_at=func.now())
                 )
                 await db.commit()
 
@@ -138,5 +152,5 @@ async def chat_socket(
             print(f"Client {websocket.client} disconnected.")
         except Exception as e:
             print(f"An unexpected error occurred in websocket: {e}")
-            await websocket.close(code=5000, reason=f"Something went wrong, please try again later.")
+            await websocket.close(code=4500, reason=f"Something went wrong, please try again later.")
     

@@ -1,0 +1,13 @@
+.oldchat_item{
+    border-radius: 6px;
+    padding-block: 7px;
+    padding-inline: 5px;
+    font-size: 0.85rem;
+    transition: 0.2s ease;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.oldchat_item:hover{
+    background-color: rgba(175, 175, 175, 0.2);
+}

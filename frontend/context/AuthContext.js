@@ -13,7 +13,6 @@ const AuthContext = createContext({
 })
 
 const AuthProvider = ({ children }) => {
-    console.log(auth)
     const [ user, setUser ] = useState(null)
     const [ loading, setloading ] = useState(true)
     
@@ -28,10 +27,10 @@ const AuthProvider = ({ children }) => {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${id_token}`,
                         },
+                        credentials: "include"
                     })
                     const result = await response.json()
                     setUser(result)
-                    console.log(result)
                 } catch (error) {
                     console.error("Error syncing with backend:", error);
                 }

@@ -7,3 +7,6 @@ class FileCreate(BaseModel):
 
     class Config:
         from_attributes = True
+
+class CurrFile(BaseModel):
+    file_id: str

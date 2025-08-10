@@ -4,10 +4,12 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import styles from "./NavBar.module.css";
 import { logout } from '@/utils/firebaseAuth';
+import OldChats from './OldChats';
 
 export default function NavBar() {
     const path = usePathname()
-    const isChatPath = path === "/chat"
+    const isChatPath = path.split("/")[1] === "chat"
+    const currFileId = path.split("/")[2]
     const [hamburgMenu, setHamburgMenu] = React.useState(false);
     const [scrolled, setScrolled] = React.useState(false);
 
@@ -54,14 +56,13 @@ export default function NavBar() {
                     isChatPath
                     &&
                     <div>
-                        <button className={styles.add_new}>
+                        <a href="/upload" className={styles.add_new}>
                             <p>Add new report.</p>
                             <span> + </span>
-                        </button>
+                        </a>
                         <hr></hr>
                         <h3>Previous Reports.</h3>
-                        <p>Blood Test</p>
-                        <p>ECG Report</p>
+                        <OldChats currFileId={currFileId}/>
                     </div>
                 }
                 <button className={styles.logout_ham} onClick={logout}>Logout</button>

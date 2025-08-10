@@ -1,19 +1,43 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import Summary from "@/app/components/summary"
 import styles from "./MsgBox.module.css"
+import LoadingChat from "./LoadingChat"
+import { prevMessages } from "@/utils/prevMessages"
 
-export default function MsgBox({ currFileId }){
+export default function MsgBox({ currFileId, token }){
     const [ messages, setMessages ] = useState([])
     const [ input, setInput ] = useState("")
     const [ isLoading, setIsLoading ] = useState(false)
+    const [ summaryReady, setSummaryReady ] = useState(false)
     const msgBoxRef = useRef(null)
     const wsRef = useRef(null)
 
     useEffect(() => {
-        const ws = new WebSocket(`${process.env.NEXT_PUBLIC_BACKEND_WEB_SOCKET_URL}`)
+        const getOldMessages = async() => {
+            try {
+                const oldMessages = await prevMessages(currFileId)
+                setMessages(oldMessages.messages)
+            } catch (error) {
+                console.error("Something went wrong, ", error)
+            }
+        }
+        getOldMessages()
+    }, [currFileId, token])
+
+    const onSummaryReady = useCallback(() => {
+        setSummaryReady(true)
+    }, [])
+    
+    useEffect(() => {
+        if (!currFileId || !token || !summaryReady) return;
+        const ws = new WebSocket(`${process.env.NEXT_PUBLIC_BACKEND_WEB_SOCKET_URL}?fileId=${currFileId}&token=${token}`)
         wsRef.current = ws
+
+        ws.onopen = () => {
+            console.log("Web Socket Opened.")
+        }
 
         ws.onmessage = (event) => {
             setIsLoading(false)
@@ -24,12 +48,12 @@ export default function MsgBox({ currFileId }){
             console.error("WebSocket error:", err)
         }
 
-        ws.onclose = () => {
-            console.log("WebSocket connection closed")
+        ws.onclose = (event) => {
+            console.log("WebSocket connection closed\n", event.code, "\n", event.reason)
         }
 
         return () => ws.close()
-    }, [])
+    }, [currFileId, token, summaryReady])
 
     const sendMessage = () => {
         if(!input.trim()) return
@@ -47,7 +71,7 @@ export default function MsgBox({ currFileId }){
     return(
         <div className={styles.chat_main}>
             <div className={styles.scrollable}>
-                <Summary currFileId={currFileId}/>
+                <Summary currFileId={currFileId} onReady={onSummaryReady}/>
                 <h2>Have Questions About This Report?</h2>
                 <h2>Ask your medical assistant.</h2>
                 <hr></hr>
@@ -60,9 +84,15 @@ export default function MsgBox({ currFileId }){
                             {msg.text}
                         </div>
                     ))}
+
+                    {isLoading && (
+                        <div className={`${styles.message} ${styles.assistant}`}>
+                            <LoadingChat />
+                        </div>
+                    )}
                 </div>
             </div>
-            <div className={styles.msg_box}>
+            <form className={styles.msg_box}>
                 <textarea 
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -76,8 +106,17 @@ export default function MsgBox({ currFileId }){
                             msgBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center'})
                         } 
                     }}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            sendMessage();
+                        }
+                    }}
                 />
-                <button className={styles.send_btn} onClick={sendMessage}>
+                <button 
+                    className={styles.send_btn} 
+                    onClick={sendMessage}
+                >
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8.99992 16V6.41407L5.70696 9.70704C5.31643 10.0976 4.68342 10.0976 4.29289 9.70704C3.90237 9.31652 3.90237 8.6835 4.29289 
                         8.29298L9.29289 3.29298L9.36907 3.22462C9.76184 2.90427 10.3408 2.92686 10.707 3.29298L15.707 8.29298L15.7753 8.36915C16.0957 8.76192 
@@ -86,7 +125,7 @@ export default function MsgBox({ currFileId }){
                         ></path>
                     </svg>
                 </button>
-            </div>
+            </form>
         </div>
     )
 }

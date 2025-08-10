@@ -1,7 +1,8 @@
 .mainNav {
     position: fixed;
+    min-height: 50px;
     width: 100%;
-    top: 0;
+    top: 0px;
     z-index: 999;
     background: rgba(255, 255, 255, 0.7);
 }
@@ -56,17 +57,27 @@
 }
 
 .logout_nav{
-    background-color: transparent;
     border: none;
     outline: none;
     justify-self: end;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
+    position: relative;
+
+    background: rgba(255, 255, 255, 0.7);
+    padding-bottom: 4px;
+    border-bottom: 2px solid black;
+    transition: 0.2s ease;
+}
+
+.logout_nav:hover{
+    opacity: 0.6;
 }
 
 .sideNav {
     position: fixed;
-    top: 50px;
+    top: 55px;
     right: 0;
     bottom: 0;
     background-color: white;
@@ -130,6 +141,25 @@
     padding-top: 7px;
 }
 
+.logout_ham{
+    position: absolute;
+
+    bottom: 80px;
+    right: 25px;
+
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    background-color: var(--background);
+    padding-bottom: 4px;
+    border-bottom: 2px solid black;
+    transition: 0.2s ease;
+}
+
+.logout_ham:hover{
+    opacity: 0.6;
+}
 @media (max-width: 780px) {
     .navTop {
         grid-template-columns: 1fr auto;

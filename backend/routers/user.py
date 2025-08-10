@@ -17,8 +17,8 @@ async def create_id_jwt(response: Response, id: str):
         key="accessToken",
         value=id_token,
         httponly=True,
-        secure=True,
-        samesite="none"
+        secure=False,
+        samesite="lax"
     )
 
 @router.post("/signin")

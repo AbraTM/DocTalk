@@ -5,15 +5,22 @@ import { currFileSummary } from "@/utils/summary"
 import styles from "./summary.module.css"
 import Loading from "./Loading"
 
-export default function Summary({ currFileId }){
+export default function Summary({ currFileId, onReady }){
     const [ loading, setLoading ] = useState(true)
     const [ summaryData, setSummaryData ] = useState({})
+    const [hasCalledReady, setHasCalledReady] = useState(false);
     
     useEffect(() => {
         const getSummaryData = async () => {
             try {
+                setLoading(true)
                 const summaryRes = await currFileSummary(currFileId)
                 setSummaryData(summaryRes)
+
+                if(summaryRes && !hasCalledReady){
+                    onReady?.()
+                    setHasCalledReady(true)
+                }
             } catch (error) {
                 console.error("Filed to fetch summary.", error)
             } finally {
@@ -21,7 +28,7 @@ export default function Summary({ currFileId }){
             }
         }
         getSummaryData()
-    }, [currFileId])
+    }, [currFileId, onReady, hasCalledReady])
     if(loading){
         return <Loading />
     }

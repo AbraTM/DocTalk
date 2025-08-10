@@ -92,7 +92,7 @@ async def allFiles(
         
         for chat in chats:
             result.append({
-                "chat_id": chat.chat_id,
+                "file_id": chat.file_id,
                 "title": chat.title
             })
         

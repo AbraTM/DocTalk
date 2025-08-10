@@ -17,7 +17,7 @@ export default function OldChats({ currFileId }) {
   return (
     <>
       {oldChats && oldChats.map((chat, index) => (
-        <a key={index} className={styles.oldchat_item}>{chat.title}</a>
+        <a href={`/chat/${chat.file_id}`} key={index} className={styles.oldchat_item}>{chat.title}</a>
       ))}
     </>
   );

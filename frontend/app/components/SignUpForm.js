@@ -18,10 +18,6 @@ export default function SignUpForm(){
         }
     }, [loading, user, router])
 
-    if(loading || user){
-        return <Loading />
-    }
-
     const [isLogin, setIsLogin] = React.useState(false);
     const [userInput, setUserInput] = React.useState({
         firstName: "",
@@ -139,6 +135,9 @@ export default function SignUpForm(){
         }
     }
 
+    if(loading || user){
+        return <Loading />
+    }
     return(
         <div className={styles.signupFormCn}>
             <h3>{isLogin ? 'Login' : 'Create an account'}</h3>

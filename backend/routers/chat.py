@@ -3,7 +3,6 @@ import uuid
 import google.generativeai as genai
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from sqlalchemy import update, func, select
-from sqlalchemy.ext.asyncio import AsyncSession
 from db.databaseConfig import get_db_session_context
 from aws.awsConfig import s3, S3_BUCKET_NAME
 from models.user import User
@@ -14,6 +13,7 @@ from models.message import Message, Role
 from utils.get_s3_key import get_s3_key
 from utils.jwt import decode_jwt_token
 from dotenv import load_dotenv
+from datetime import datetime, timezone
 
 load_dotenv()
 router = APIRouter(prefix="/ws", tags=["Chat"])
@@ -27,7 +27,7 @@ async def chat_socket(
     await websocket.accept()
     decoded_token = decode_jwt_token(token)
     if decoded_token.get("status") != "success":
-        await websocket.close(code=4001, reason=decoded_token.message)
+        await websocket.close(code=4001, reason=decoded_token.get("message", "Something went wrong"))
         return
     
     try:
@@ -80,7 +80,7 @@ async def chat_socket(
 
             if chat:
                 messages_result = await db.execute(
-                    select(Message).where(Message.chat_id == chat.chat_id).order_by(Message.created_at.asc())
+                    select(Message).where(Message.chat_id == chat.chat_id).order_by(Message.created_at.asc(), Message.message_id.asc())
                 )
                 messages = messages_result.scalars().all()
                 for msg in messages:
@@ -129,16 +129,19 @@ async def chat_socket(
                 except WebSocketDisconnect:
                     break
 
+                now = datetime.now(timezone.utc)
                 # Saving the user's msg and the assistant's response to db
                 db.add(Message(
                     chat_id = chat.chat_id,
                     role = Role.user,
-                    content = user_msg
+                    content = user_msg,
+                    created_at=now
                 ))
                 db.add(Message(
                     chat_id = chat.chat_id,
                     role = Role.assistant,
-                    content = assistant_msg
+                    content = assistant_msg,
+                    created_at=now
                 ))
                 await db.commit()
 

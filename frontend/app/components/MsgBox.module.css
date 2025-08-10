@@ -3,45 +3,85 @@
   margin: 15px;
   width: 85%;
   height: 90vh;
-
-  padding-block: 25px;
-  padding-inline: 20px 40px;  
+  padding: 25px 40px 100px 20px; /* Adjusted padding to create space for the message box */
   border-radius: 20px;
-
-  position: relative;;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden; /* Hide overflow on the main container */
 }
 
-.scrollable{
-  height: 80%;
-  overflow-y: auto;
+.scrollable {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; 
+  overflow-y: auto; /* This is the key for a contained scroll area */
   scrollbar-width: none;
 }
 
-.scrollable::-webkit-scrollbar{
+.scrollable::-webkit-scrollbar {
   display: none;
 }
 
-.msg_box{
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding-inline: 20px;
+  padding-bottom: 200px; 
+  font-weight: 400;
+  font-size: clamp(0.85rem, 1vw, 2rem);
+  line-height: 1.5rem;
+  word-spacing: 1.5px;
+}
+
+.message {
+  max-width: 75%;
+  color: var(--background);
+  background-color: rgba(59, 59, 59, 0.4);
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.2), -2px -2px 10px 0px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.user {
+  align-self: flex-end;
+}
+
+.assistant {
+  align-self: flex-start;
+}
+
+.scrollable h2 {
+  color: var(--background);
+  font-size: clamp(1.2rem, 1.8vw, 2rem);
+  padding-inline: 15px;
+}
+
+.scrollable hr {
+  padding-inline: 10px;
+  margin-block: 10px 40px;
+}
+
+.msg_box {
   position: absolute;
-  width: 80%;
+  width: calc(85% - 80px); /* Adjusting width to account for padding */
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-
   background-color: #3b3b3b;
   border-radius: 20px;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 2px;
   padding: 1rem 1.4rem;
-
   border: 1px solid rgba(128, 128, 128, 0.4);
   box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.2), -2px -2px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
-.msg_box textarea{
+.msg_box textarea {
   resize: none;
   border: none;
   outline: none;
@@ -49,55 +89,12 @@
   color: var(--background);
 }
 
-.send_btn{
+.send_btn {
   border: none;
   outline: none;
   align-self: flex-end;
   padding: 4px 6px;
   border-radius: 50%;
-}
-
-.messages{
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    margin-bottom: 60px;
-    padding-inline: 20px;
-
-    font-weight: 400;
-    font-size: clamp(0.85rem, 1vw, 2rem);
-    line-height: 1.5rem;
-    word-spacing: 1.5px;
-}
-
-.message{
-    max-width: 75%;
-    color: var(--background);
-    background-color: rgba(59, 59, 59, 0.4);
-    
-    border: 1px solid rgba(128, 128, 128, 0.4);
-    box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.2), -2px -2px 10px 0px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    border-radius: 8px;
-}
-
-.user{
-    align-self: flex-end;
-}
-
-.assistant{
-    align-self: flex-start;
-}
-
-.scrollable h2{
-    color: var(--background);
-    font-size: clamp(1.2rem, 1.8vw, 2rem);
-    padding-inline: 15px;
-}
-
-.scrollable hr{
-    padding-inline: 10px;
-    margin-block: 10px 40px;
 }
 
 @media (max-width: 780px) {
@@ -106,7 +103,8 @@
     padding-inline: 20px;
     width: 100%;
   }
-  .msg_box{
+  .msg_box {
     margin-inline: 0;
+    width: calc(100% - 40px); /* Adjusting for padding on mobile */
   }
 }
